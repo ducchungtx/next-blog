@@ -8,8 +8,6 @@ if (!process.env.DB_URI) {
 }
 
 const client = new MongoClient(process.env.DB_URI, {
-  useNewUrlParser: true, // removes a deprecation warning when connecting
-  useUnifiedTopology: true, // removes a deprecation warning when connecting 
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,

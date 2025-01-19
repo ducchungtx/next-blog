@@ -5,6 +5,7 @@ import { LoginFormSchema, RegisterFormSchema } from "@/lib/rules";
 import { getCollection } from "@/lib/db";
 import { createSession } from "@/lib/sessions";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export async function register(state, formData) {
   // await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -110,4 +111,12 @@ export async function login(state, formData) {
   // redirect the user to the dashboard
   redirect('/dashboard');
 
+}
+
+export async function logout() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+
+  // remove the session cookie
+  redirect('/');
 }

@@ -23,3 +23,13 @@ export const RegisterFormSchema = z.object({
     });
   }
 });
+
+export const BlogPostSchema = z.object({
+  title: z.string()
+    .min(1, { message: "Title is required" })
+    .max(100, { message: "Title must be less than 100 characters" })
+    .trim(),
+  content: z.string()
+    .min(1, { message: "Content is required" })
+    .trim(),
+});
