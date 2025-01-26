@@ -1,19 +1,25 @@
-import jwt from "jsonwebtoken";
+import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 
 const secretKey = process.env.SESSION_SECRET;
+const encodedKey = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload) {
-  return jwt.sign(payload, secretKey, { algorithm: "HS256", expiresIn: "7d" });
+  return new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(encodedKey);
 }
 
 export async function decrypt(session) {
   try {
-    const payload = jwt.verify(session, secretKey, { algorithms: ["HS256"] });
+    const { payload } = await jwtVerify(session, encodedKey, {
+      algorithms: ["HS256"],
+    });
     return payload;
   } catch (error) {
-    console.log("Failed to verify session", error);
-    throw new Error("Error decrypting session");
+    console.log("Failed to verify session");
   }
 }
 
